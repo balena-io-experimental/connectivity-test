@@ -37,6 +37,8 @@ async function testrun() {
 		console.log(await resin.models.device.isOnline(testDevice))
 		if (await resin.models.device.isOnline(testDevice)) {
 			console.log("Device is online when it should be offline!")
+			console.log("Turning on Wifi just in case")
+			await myPlug.setPowerState(true)
 			process.exit(1)
 		} else {
 			console.log("Device is offline properly.")
