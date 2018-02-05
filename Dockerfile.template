@@ -1,0 +1,7 @@
+FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node
+
+WORKDIR /usr/src/app
+
+RUN apk add --no-cache screen
+
+CMD while : ; do echo "wai'ing"; sleep 60; done
