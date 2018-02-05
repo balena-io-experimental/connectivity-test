@@ -7,7 +7,7 @@ var resin = require('resin-sdk')({
 
 const client = new Client();
 
-const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 10;
+const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 5;
 const sleepTime = sleepMinutes * 60 * 1000; // 10 minutes
 const authToken = process.env.AUTH_TOKEN || 'nope';
 const testDevice = process.env.TEST_DEVICE;
@@ -34,7 +34,6 @@ async function testrun() {
 		await myPlug.setPowerState(false)
 		await sleep(sleepTime)
 
-		console.log(await resin.models.device.isOnline(testDevice))
 		if (await resin.models.device.isOnline(testDevice)) {
 			console.log("Device is online when it should be offline!")
 			console.log("Turning on Wifi just in case")
@@ -48,7 +47,6 @@ async function testrun() {
 		await myPlug.setPowerState(true)
 		await sleep(sleepTime)
 
-		console.log(await resin.models.device.isOnline(testDevice))
 		if (await resin.models.device.isOnline(testDevice)) {
 			console.log("Device is online properly.")
 		} else {
