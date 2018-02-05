@@ -4,4 +4,7 @@ WORKDIR /usr/src/app
 
 RUN apk add --no-cache screen
 
-CMD while : ; do echo "wai'ing"; sleep 60; done
+COPY . ./
+RUN npm install --production
+
+CMD ["bash", "testrun.sh"]
