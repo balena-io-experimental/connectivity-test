@@ -2,4 +2,4 @@
 
 node index.js
 echo "Error code: $?"
-while : ; do echo "finished...."; sleep 600; done
+while : ; do sleep 600; done
