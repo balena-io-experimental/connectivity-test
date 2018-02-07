@@ -74,7 +74,6 @@ async function testrun() {
 		if (await resin.models.device.isOnline(testDevice)) {
 			console.log("Device is online properly.")
 		} else {
-			console.log(await resin.models.device.isOnline(testDevice))
 			console.log("Device is offline when it should be online!")
 			if (useSenseHat) {
 				sense.setPixels(crossOut);
