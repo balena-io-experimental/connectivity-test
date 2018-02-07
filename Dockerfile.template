@@ -1,11 +1,11 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:9.2.1-slim-20180203
+FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:9.4.0-20180206
 
 WORKDIR /usr/src/app
 
 RUN apk add --no-cache screen
 
 COPY package.json .
-RUN npm install --production
+RUN npm install --only=production
 COPY . ./
 
 CMD ["bash", "testrun.sh"]

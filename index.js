@@ -1,9 +1,30 @@
+"use strict";
 const sleep = require('await-sleep');
 require('dotenv').config()
 const { Client } = require('tplink-smarthome-api');
 var resin = require('resin-sdk')({
 	apiUrl: "https://api.resin.io/"
 })
+const sense = require("sense-hat-led").sync;
+
+const useSenseHat = ( process.env.SENSEHAT )
+if (useSenseHat) {
+	console.log("SenseHat enabled")
+	sense.clear();
+	var X = [255, 0, 0];  // Red
+    var O = [0, 0, 0];  // Black
+
+	var crossOut = [
+		X, O, O, O, O, O, O, X,
+		O, X, O, O, O, O, X, O,
+		O, O, X, O, O, X, O, O,
+		O, O, O, X, X, O, O, O,
+		O, O, O, X, X, O, O, O,
+		O, O, X, O, O, X, O, O,
+		O, X, O, O, O, O, X, O,
+		X, O, O, O, O, O, O, X
+	];
+}
 
 const client = new Client();
 
@@ -38,6 +59,9 @@ async function testrun() {
 			console.log("Device is online when it should be offline!")
 			console.log("Turning on Wifi just in case")
 			await myPlug.setPowerState(true)
+			if (useSenseHat) {
+				sense.setPixels(crossOut);
+			}
 			process.exit(1)
 		} else {
 			console.log("Device is offline properly.")
@@ -52,6 +76,9 @@ async function testrun() {
 		} else {
 			console.log(await resin.models.device.isOnline(testDevice))
 			console.log("Device is offline when it should be online!")
+			if (useSenseHat) {
+				sense.setPixels(crossOut);
+			}
 			process.exit(2)
 		}
 		console.log("===================");
