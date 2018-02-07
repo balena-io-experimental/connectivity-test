@@ -32,6 +32,7 @@ const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 5;
 const sleepTime = sleepMinutes * 60 * 1000; // 10 minutes
 const authToken = process.env.AUTH_TOKEN || 'nope';
 const testDevice = process.env.TEST_DEVICE;
+console.log(`Testing: ${testDevice}`);
 const plugIP = process.env.PLUG_IP;
 var myPlug;
 var runNumber = 0;
