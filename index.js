@@ -6,6 +6,7 @@ var resin = require('resin-sdk')({
 	apiUrl: "https://api.resin.io/"
 })
 const sense = require("sense-hat-led").sync;
+const request = require('request');
 
 const useSenseHat = ( process.env.SENSEHAT )
 if (useSenseHat) {
@@ -36,6 +37,11 @@ if (useSenseHat) {
 	];
 }
 
+
+const sendWebNotification = function (URL, value1, value2, value3) {
+	request.post({url: URL, json: {value1: value1, value2: value2, value3: value3}})
+}
+
 const client = new Client();
 
 const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 5;
@@ -44,6 +50,7 @@ const authToken = process.env.AUTH_TOKEN || 'nope';
 const testDevice = process.env.TEST_DEVICE;
 console.log(`Testing: ${testDevice}`);
 const plugIP = process.env.PLUG_IP;
+const iftttURL = process.env.IFTTT_URL || false;
 var myPlug;
 var runNumber = 0;
 
@@ -73,6 +80,9 @@ async function testrun() {
 			if (useSenseHat) {
 				sense.setPixels(crossOut);
 			}
+			if ( iftttURL ) {
+				sendWebNotification(iftttURL, testDevice.slice(0, 7), "online when shouldn't", runNumber);
+			}
 			process.exit(1)
 		} else {
 			console.log("Device is offline properly.")
@@ -89,6 +99,9 @@ async function testrun() {
 			if (useSenseHat) {
 				sense.setPixels(crossOut);
 			}
+			if ( iftttURL ) {
+				sendWebNotification(iftttURL, testDevice.slice(0, 7), "offline when shouldn't", runNumber);
+			}
 			process.exit(2)
 		}
 		console.log("===================");
@@ -98,6 +111,9 @@ async function testrun() {
 		console.log('Bummer', err);
 		if (useSenseHat) {
 			sense.setPixels(circle);
+		}
+		if ( iftttURL ) {
+			sendWebNotification(iftttURL, testDevice.slice(0, 7), 'general bummer', runNumber);
 		}
 		process.exit(3)
 	}
