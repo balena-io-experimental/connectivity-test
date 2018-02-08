@@ -37,9 +37,16 @@ if (useSenseHat) {
 	];
 }
 
-
-const sendWebNotification = function (URL, value1, value2, value3) {
-	request.post({url: URL, json: {value1: value1, value2: value2, value3: value3}})
+async function sendWebNotification (url, value1, value2, value3) {
+	return new Promise((resolve, reject) => {
+		request.post({url: url, json: {value1: value1, value2: value2, value3: value3}}, function(err, res, body) {
+			if (err) {
+				reject
+			} else {
+				resolve(res)
+			}
+		});
+    })
 }
 
 const client = new Client();
@@ -80,8 +87,8 @@ async function testrun() {
 			if (useSenseHat) {
 				sense.setPixels(crossOut);
 			}
-			if ( iftttURL ) {
-				sendWebNotification(iftttURL, testDevice.slice(0, 7), "online when shouldn't", runNumber);
+			if (iftttURL) {
+				await sendWebNotification(iftttURL, testDevice.slice(0, 7), "online when shouldn't", runNumber);
 			}
 			process.exit(1)
 		} else {
@@ -99,8 +106,8 @@ async function testrun() {
 			if (useSenseHat) {
 				sense.setPixels(crossOut);
 			}
-			if ( iftttURL ) {
-				sendWebNotification(iftttURL, testDevice.slice(0, 7), "offline when shouldn't", runNumber);
+			if (iftttURL) {
+				await sendWebNotification(iftttURL, testDevice.slice(0, 7), "offline when shouldn't", runNumber);
 			}
 			process.exit(2)
 		}
@@ -112,8 +119,8 @@ async function testrun() {
 		if (useSenseHat) {
 			sense.setPixels(circle);
 		}
-		if ( iftttURL ) {
-			sendWebNotification(iftttURL, testDevice.slice(0, 7), 'general bummer', runNumber);
+		if (iftttURL) {
+			await sendWebNotification(iftttURL, testDevice.slice(0, 7), 'general bummer', runNumber);
 		}
 		process.exit(3)
 	}
