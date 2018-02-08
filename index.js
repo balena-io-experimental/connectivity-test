@@ -24,6 +24,16 @@ if (useSenseHat) {
 		O, X, O, O, O, O, X, O,
 		X, O, O, O, O, O, O, X
 	];
+	var circle = [
+		O, O, O, X, X, O, O, O,
+		O, O, X, O, O, X, O, O,
+		O, X, O, O, O, O, X, O,
+		X, O, O, O, O, O, O, X,
+		X, O, O, O, O, O, O, X,
+		O, X, O, O, O, O, X, O,
+		O, O, X, O, O, X, O, O,
+		O, O, O, X, X, O, O, O
+	];
 }
 
 const client = new Client();
@@ -86,6 +96,10 @@ async function testrun() {
 		testrun()
 	} catch (err) {
 		console.log('Bummer', err);
+		if (useSenseHat) {
+			sense.setPixels(circle);
+		}
+		process.exit(3)
 	}
 }
 
