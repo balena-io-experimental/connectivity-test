@@ -1,20 +1,26 @@
 {
-  "name": "plug",
+  "name": "connectivity-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "Wifi Connectivity Test Rig, master node",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/resin-io-playground/connectivity-test"
+  },
+  "author": "Gergely Imreh <gergely@resin.io> (https://gergely.imreh.net)",
+  "license": "Apache-2.0",
   "dependencies": {
     "async": "^2.6.0",
     "await-sleep": "0.0.1",
     "dotenv": "^4.0.0",
-    "request": "^2.83.0",
     "resin-sdk": "^8.1.0",
-    "sense-hat-led": "^1.0.1",
     "tplink-smarthome-api": "^0.22.0"
+  },
+  "optionalDependencies": {
+    "sense-hat-led": "^1.0.1",
+    "request": "^2.83.0"
   }
 }

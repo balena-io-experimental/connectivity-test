@@ -4,8 +4,9 @@ WORKDIR /usr/src/app
 
 RUN apk add --no-cache screen
 
-COPY package.json .
+COPY package.json package-lock.json ./
 RUN npm install --only=production
-COPY . ./
+COPY testrun.sh ./
+COPY src ./src
 
 CMD ["bash", "testrun.sh"]
