@@ -67,7 +67,14 @@ async function setup() {
 		await resin.auth.loginWithToken(authToken);
 		testrun()
 	} catch (err) {
-		console.log('Bummer', err);
+		console.log('Pretest Bummer', err);
+		if (useSenseHat) {
+			sense.setPixels(circle);
+		}
+		if (iftttURL) {
+			await sendWebNotification(iftttURL, testDevice.slice(0, 7), 'cannot connect to smartplug', '0');
+		}
+		process.exit(3)
 	}
 }
 
