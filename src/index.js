@@ -95,6 +95,20 @@ async function setup(plug) {
     try {
         myPlug = await client.getDevice({host: plug});
         await resin.auth.loginWithToken(authToken);
+
+        if (await resin.models.device.isOnline(testDevice)) {
+            console.log("Device is online properly, can get started.");
+        } else {
+            console.log("Device is offline at the start of the test, unexpected")
+            if (useSenseHat) {
+                sense.setPixels(circle);
+            }
+            if (useIFTTT) {
+                await sendWebNotification(iftttURL, testDevice.slice(0, 7), "pre-start check failed", '0');
+            }
+            process.exit(4);
+        }
+
         testrun();
     } catch (err) {
         console.log('Pretest Bummer', err);
