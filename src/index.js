@@ -78,7 +78,7 @@ async function checkOnlineStatus(device, onResin) {
     if (onResin) {
         return resin.models.device.isOnline(device);
     } else {
-        ping.promise.probe(device)
+        return ping.promise.probe(device)
     };
 }
 

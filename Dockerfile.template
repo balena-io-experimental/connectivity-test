@@ -1,8 +1,13 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:8.9.4-20180302
+FROM resin/%%RESIN_MACHINE_NAME%%-node:8.9.4-20180302
 
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache screen
+RUN    apt-get update \
+    && apt-get install -qy \
+        screen \
+        libnss-mdns \
+    && apt-get clean \
+    && sed -i 's/.*enable-dbus=.*/enable-dbus=no/' /etc/avahi/avahi-daemon.conf
 
 COPY package.json package-lock.json ./
 RUN npm install --only=production
