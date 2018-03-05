@@ -1,6 +1,7 @@
 const sleep = require('await-sleep');
 require('dotenv').config();
 const { Client } = require('tplink-smarthome-api');
+var ping = require('ping');
 const resin = require('resin-sdk')({
     apiUrl: "https://api.resin.io/"
 });
@@ -73,12 +74,28 @@ async function sendWebNotification (url, deviceID, message, run) {
     })
 }
 
+async function checkOnlineStatus(device, onResin) {
+    if (onResin) {
+        return resin.models.device.isOnline(device);
+    } else {
+        ping.promise.probe(device)
+    };
+}
+
+
 const client = new Client();
 
 const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 5;
 const sleepTime = sleepMinutes * 60 * 1000; // 10 minutes
 const authToken = process.env.AUTH_TOKEN || 'nope';
+
+// Test devices can be resin UUID, or local IP or name such as 'testdevice.local'
+// We should be able to distinguish between them by checking whether the name has a `.` in it
+const localPattern  =/\./i;
 const testDevice = process.env.TEST_DEVICE;
+const testDeviceResin = testDevice.match(localPattern) == null;
+const testDeviceDisplayName = testDeviceResin ? testDevice.slice(0, 7) : testDevice;
+
 console.log(`Testing: ${testDevice}`);
 const plugIP = process.env.PLUG_IP;
 var myPlug;
@@ -96,7 +113,7 @@ async function setup(plug) {
         myPlug = await client.getDevice({host: plug});
         await resin.auth.loginWithToken(authToken);
 
-        if (await resin.models.device.isOnline(testDevice)) {
+        if (await checkOnlineStatus(testDevice, testDeviceResin)) {
             console.log("Device is online properly, can get started.");
         } else {
             console.log("Device is offline at the start of the test, unexpected")
@@ -104,7 +121,7 @@ async function setup(plug) {
                 sense.setPixels(circle);
             }
             if (useIFTTT) {
-                await sendWebNotification(iftttURL, testDevice.slice(0, 7), "pre-start check failed", '0');
+                await sendWebNotification(iftttURL, testDeviceDisplayName, "pre-start check failed", '0');
             }
             process.exit(4);
         }
@@ -116,7 +133,7 @@ async function setup(plug) {
             sense.setPixels(circle);
         }
         if (useIFTTT) {
-            await sendWebNotification(iftttURL, testDevice.slice(0, 7), 'cannot connect to smartplug', '0');
+            await sendWebNotification(iftttURL, testDeviceDisplayName, 'cannot connect to smartplug', '0');
         }
         process.exit(3);
     }
@@ -137,7 +154,7 @@ async function testrun() {
         await myPlug.setPowerState(false);
         await sleep(sleepTime);
 
-        if (await resin.models.device.isOnline(testDevice)) {
+        if (await checkOnlineStatus(testDevice, testDeviceResin)) {
             console.log("Device is online when it should be offline!");
             console.log("Turning on Wifi just in case");
             await myPlug.setPowerState(true);
@@ -145,7 +162,7 @@ async function testrun() {
                 sense.setPixels(crossOut);
             }
             if (useIFTTT) {
-                await sendWebNotification(iftttURL, testDevice.slice(0, 7), "online when shouldn't", runNumber);
+                await sendWebNotification(iftttURL, testDeviceDisplayName, "online when shouldn't", runNumber);
             }
             process.exit(1)
         } else {
@@ -156,7 +173,7 @@ async function testrun() {
         await myPlug.setPowerState(true);
         await sleep(sleepTime);
 
-        if (await resin.models.device.isOnline(testDevice)) {
+        if (await checkOnlineStatus(testDevice, testDeviceResin)) {
             console.log("Device is online properly.");
         } else {
             console.log("Device is offline when it should be online!")
@@ -164,7 +181,7 @@ async function testrun() {
                 sense.setPixels(crossOut);
             }
             if (useIFTTT) {
-                await sendWebNotification(iftttURL, testDevice.slice(0, 7), "offline when shouldn't", runNumber);
+                await sendWebNotification(iftttURL, testDeviceDisplayName, "offline when shouldn't", runNumber);
             }
             process.exit(2);
         }
@@ -177,7 +194,7 @@ async function testrun() {
             sense.setPixels(circle);
         }
         if (useIFTTT) {
-            await sendWebNotification(iftttURL, testDevice.slice(0, 7), 'general bummer', runNumber);
+            await sendWebNotification(iftttURL, testDeviceDisplayName, 'general bummer', runNumber);
         }
         process.exit(3);
     }

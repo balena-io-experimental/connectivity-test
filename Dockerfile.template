@@ -1,4 +1,4 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:9.4.0-20180206
+FROM resin/%%RESIN_MACHINE_NAME%%-alpine-node:8.9.4-20180302
 
 WORKDIR /usr/src/app
 
