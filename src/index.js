@@ -74,12 +74,27 @@ async function sendWebNotification (url, deviceID, message, run) {
     })
 }
 
+/**
+ * Check online status of a device, either through the resin.io API, or local ping
+ *
+ * @async
+ * @function checkOnlineStatus
+ * @param {string} device - device identified to t
+ * @param {boolean} onResin - whether to do resin API check to determine online status
+ * @return {Promise}
+ */
 async function checkOnlineStatus(device, onResin) {
-    if (onResin) {
-        return resin.models.device.isOnline(device);
-    } else {
-        return ping.promise.probe(device)
-    };
+    return new Promise((resolve, reject) => {
+        if (onResin) {
+            resin.models.device.isOnline(device).then(function (res) {
+                resolve(res);
+            })
+        } else {
+            ping.promise.probe(device).then(function (res) {
+                resolve(res.alive);
+            })
+        }
+    })
 }
 
 
