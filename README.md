@@ -33,7 +33,7 @@ Environment Variables to set on the test device in the resin.io Dashboard:
 *   `AUTH_TOKEN`: a resin.io auth token (from the dashboard, for example), for device offline/online query (required)
 *   `PLUG_IP`: the IP address of the smartplug that turns the access point on/off (required); recommended setting static IP for that device on the network
 *   `TEST_DEVICE`: the UUID of the device under test (required)
-*   `SLEEP_MINS`: number of minutes to sleep between smartplug off or on, and device offline/online query, default is `5` (optional)
+*   `SLEEP_MINS`: number of minutes to sleep between smartplug off or on, and device offline/online query, default is `10` (optional)
 *   `SENSEHAT`: set it to any value to enable SenseHAT visual feedback (red cross when failed test, red circle if something else failed along the way)
 *   `IFTTT_URL`: the IFTTT webhook URL if want to have notification of test failures
 

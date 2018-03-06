@@ -100,8 +100,8 @@ async function checkOnlineStatus(device, onResin) {
 
 const client = new Client();
 
-const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 5;
-const sleepTime = sleepMinutes * 60 * 1000; // 10 minutes
+const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 10;
+const sleepTime = sleepMinutes * 60 * 1000;
 const authToken = process.env.AUTH_TOKEN || 'nope';
 
 // Test devices can be resin UUID, or local IP or name such as 'testdevice.local'
