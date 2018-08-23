@@ -13,12 +13,12 @@
   "author": "Gergely Imreh <gergely@resin.io> (https://gergely.imreh.net)",
   "license": "Apache-2.0",
   "dependencies": {
-    "async": "^2.6.0",
+    "async": "^2.6.1",
     "await-sleep": "0.0.1",
-    "dotenv": "^4.0.0",
+    "dotenv": "^6.0.0",
     "ping": "^0.2.2",
     "resin-sdk": "^10.0.5",
-    "tplink-smarthome-api": "^0.22.0"
+    "tplink-smarthome-api": "^0.23.0"
   },
   "optionalDependencies": {
     "request": "^2.88.0",
