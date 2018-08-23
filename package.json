@@ -17,11 +17,11 @@
     "await-sleep": "0.0.1",
     "dotenv": "^4.0.0",
     "ping": "^0.2.2",
-    "resin-sdk": "^8.1.0",
+    "resin-sdk": "^10.0.5",
     "tplink-smarthome-api": "^0.22.0"
   },
   "optionalDependencies": {
-    "sense-hat-led": "^1.0.1",
-    "request": "^2.83.0"
+    "request": "^2.88.0",
+    "sense-hat-led": "^1.0.1"
   }
 }

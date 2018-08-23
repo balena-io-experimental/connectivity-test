@@ -1,4 +1,4 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-node:8.9.4-20180302
+FROM resin/%%RESIN_MACHINE_NAME%%-node:9.11.2-20180818
 
 WORKDIR /usr/src/app
 
@@ -9,7 +9,7 @@ RUN    apt-get update \
     && apt-get clean \
     && sed -i 's/.*enable-dbus=.*/enable-dbus=no/' /etc/avahi/avahi-daemon.conf
 
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install --only=production
 COPY testrun.sh ./
 COPY src ./src
