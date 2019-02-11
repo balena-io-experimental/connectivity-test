@@ -102,6 +102,8 @@ const client = new Client();
 
 const sleepMinutes = parseInt(process.env.SLEEP_MINS) || 10;
 const sleepTime = sleepMinutes * 60 * 1000;
+const plugSleepMinutes = parseInt(process.env.PLUG_SLEEP_MINS) || 5;
+const plugSleepTime = plugSleepMinutes * 60 * 1000;
 const authToken = process.env.AUTH_TOKEN || 'nope';
 
 // Test devices can be resin UUID, or local IP or name such as 'testdevice.local'
@@ -114,6 +116,8 @@ const testDeviceDisplayName = testDeviceResin ? testDevice.slice(0, 7) : testDev
 console.log(`Testing: ${testDevice}`);
 const plugIP = process.env.PLUG_IP;
 var myPlug;
+const plugIP2 = process.env.PLUG_IP2 || 'nope';
+var myPlug2;
 var runNumber = 0;
 
 /**
@@ -123,9 +127,12 @@ var runNumber = 0;
  * @function setup
  * @param {string} plug - The IP address of the TP-Link Smart Plug to use
  */
-async function setup(plug) {
+async function setup(plug, plug2) {
     try {
         myPlug = await client.getDevice({host: plug});
+        if (plug2 !== 'nope') {
+          myPlug2 = await client.getDevice({host: plug2});
+        }
         await resin.auth.loginWithToken(authToken);
 
         if (await checkOnlineStatus(testDevice, testDeviceResin)) {
@@ -167,12 +174,19 @@ async function testrun() {
 
         console.log("Turning plug off");
         await myPlug.setPowerState(false);
+        if (myPlug2) {
+          console.log("Turning 2nd plug off");
+          await myPlug2.setPowerState(false);
+        }
         await sleep(sleepTime);
 
         if (await checkOnlineStatus(testDevice, testDeviceResin)) {
             console.log("Device is online when it should be offline!");
-            console.log("Turning on Wifi just in case");
+            console.log("Turning on plug(s) just in case");
             await myPlug.setPowerState(true);
+            if (myPlug2) {
+              await myPlug.setPowerState(true);
+            }
             if (useSenseHat) {
                 sense.setPixels(crossOut);
             }
@@ -186,6 +200,10 @@ async function testrun() {
 
         console.log("Turning plug on");
         await myPlug.setPowerState(true);
+        if (myPlug2) {
+          await sleep(plugSleepTime);
+          await myPlug.setPowerState(true);
+        }
         await sleep(sleepTime);
 
         if (await checkOnlineStatus(testDevice, testDeviceResin)) {
@@ -216,4 +234,4 @@ async function testrun() {
 };
 
 // Start testing
-setup(plugIP);
+setup(plugIP, plugIP2);
