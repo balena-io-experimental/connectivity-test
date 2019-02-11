@@ -3,7 +3,7 @@
 # Start Avahi
 /usr/sbin/avahi-daemon -s &
 
-if [ -n "IDLE" ]; then
+if [ -n "$IDLE" ]; then
   while : ; do
     echo "Not running tests, just idling..."
     sleep 60;
