@@ -2,8 +2,8 @@ const sleep = require('await-sleep');
 require('dotenv').config();
 const { Client } = require('tplink-smarthome-api');
 var ping = require('ping');
-const resin = require('resin-sdk')({
-    apiUrl: "https://api.resin.io/"
+const resin = require('balena-sdk')({
+    apiUrl: "https://api.balena-cloud.com/"
 });
 
 // SenseHat is optional dependency

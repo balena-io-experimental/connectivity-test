@@ -15,9 +15,10 @@
   "dependencies": {
     "async": "^2.6.1",
     "await-sleep": "0.0.1",
-    "dotenv": "^6.0.0",
+    "balena-auth": "^3.0.0",
+    "balena-sdk": "^11.7.0",
+    "dotenv": "^6.2.0",
     "ping": "^0.2.2",
-    "resin-sdk": "^10.0.5",
     "tplink-smarthome-api": "^0.23.0"
   },
   "optionalDependencies": {
